@@ -1,0 +1,17 @@
+# Home Assistant secrets and sensitive files
+secrets.yaml
+.storage/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/settings.json
+*.swp
+*.swo
+*~
+
+# Backup files
+*.bak
+*.orig

@@ -1,0 +1,18 @@
+title: Energy
+views:
+  - title: Energy
+    path: energy
+    icon: mdi:lightning-bolt
+    cards:
+      - type: energy-date-selection
+
+      - type: energy-usage-graph
+
+      - type: energy-sources-table
+
+      - type: entities
+        title: Power Consumption
+        entities:
+          - entity: sensor.daily_energy
+          - entity: sensor.monthly_energy
+          - entity: sensor.current_power
