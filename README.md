@@ -58,6 +58,9 @@ Current expected WeatherLink entity IDs (observed in runtime):
 - `sensor.annerleyweather_last_rain_storm`
 - `sensor.annerleyweather_last_updated`
 - `sensor.annerleyweather_outside_humidity`
+- `sensor.annerleyweather_outside_temperature`
+- `sensor.annerleyweather_barometric_pressure`
+- `sensor.annerleyweather_rain_rate`
 
 Open the **Weather** dashboard on your tablet and confirm cards populate without entity-not-found errors.
 
@@ -71,16 +74,12 @@ Recommendation:
 - **After validation:** remove the custom integration and any related `sensor: - platform: weatherlink_dashboard` YAML config to avoid confusion and duplicate/invalid entities.
 
 
-### Custom card dependency for Weather Trends
+### Weather Trends dependency
 
-The weather dashboard now uses `custom:apexcharts-card` for dual-axis Weather Trends charts.
+The weather dashboard now uses built-in `history-graph` cards for the trend section.
 
-Install via HACS:
-
-1. Go to **HACS → Frontend**.
-2. Search for **ApexCharts Card** and install it.
-3. Confirm the Lovelace resource is added (usually `/hacsfiles/apexcharts-card/apexcharts-card.js`).
-4. Reload the browser cache and refresh dashboards.
+- No custom Lovelace card dependency is required.
+- No HACS frontend card install is required for Weather Trends.
 
 ## Windy embeds
 
