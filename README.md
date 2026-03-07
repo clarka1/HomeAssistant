@@ -13,51 +13,22 @@ A collection of [Home Assistant](https://www.home-assistant.io/) Lovelace dashbo
 ├── themes/                                  # Custom UI themes
 │   └── default.yaml                         # Default theme
 ├── custom_cards/                            # Custom Lovelace card resources
-└── custom_components/weatherlink_dashboard/ # Custom WeatherLink sensor integration
+└── custom_components/weatherlink_dashboard/ # Legacy custom WeatherLink sensor integration
 ```
 
 ## Weather Dashboard (Annerley)
 
-The weather solution in this repository provides:
+The weather dashboard is now wired to the **existing Home Assistant WeatherLink integration entities** already created in your instance.
 
-- WeatherLink API v2 live station polling (60-second interval),
-- Home Assistant sensors for all requested live metrics,
-- Windy point-forecast summary sensors (rainfall/wind/temperature trend/cloud cover),
-- a two-view Lovelace dashboard designed for tablet use.
+This avoids failures from non-existent `sensor.annerley_*` entities and keeps the dashboard compatible with an integration that is already working in production.
 
 ### 1) Copy files into Home Assistant config
 
 From this repository, copy:
 
-- `custom_components/weatherlink_dashboard/` → `/config/custom_components/weatherlink_dashboard/`
 - `dashboards/weather_dashboard.yaml` → `/config/dashboards/weather_dashboard.yaml`
 
-### 2) Configure secrets
-
-In `/config/secrets.yaml` define:
-
-```yaml
-weatherlink_api_key: YOUR_WEATHERLINK_API_KEY
-weatherlink_api_secret: YOUR_WEATHERLINK_API_SECRET
-windy_map_api_key: YOUR_WINDY_MAP_API_KEY
-windy_point_api_key: YOUR_WINDY_POINT_API_KEY
-```
-
-### 3) Configure sensors in `configuration.yaml`
-
-```yaml
-sensor:
-  - platform: weatherlink_dashboard
-    station_id: 73624e8add9f4437b9e61c613188df34
-    latitude: -27.51638
-    longitude: 153.02674
-    weatherlink_api_key: !secret weatherlink_api_key
-    weatherlink_api_secret: !secret weatherlink_api_secret
-    windy_point_api_key: !secret windy_point_api_key
-    scan_interval: "00:01:00"
-```
-
-### 4) Register the dashboard in Lovelace
+### 2) Register the dashboard in Lovelace
 
 ```yaml
 lovelace:
@@ -71,53 +42,50 @@ lovelace:
       show_in_sidebar: true
 ```
 
-### 5) Restart Home Assistant
+### 3) Restart or reload Lovelace dashboards
 
-Restart from **Settings → System → Restart**.
+Apply from **Settings → Dashboards** (reload YAML dashboards) or restart Home Assistant.
 
-### 6) Verify entities and dashboard
+### 4) Verify entities and dashboard
 
-Expected entity IDs:
+Current expected WeatherLink entity IDs (observed in runtime):
 
-- `sensor.annerley_temperature`
-- `sensor.annerley_humidity`
-- `sensor.annerley_wind_speed`
-- `sensor.annerley_wind_gust`
-- `sensor.annerley_wind_direction`
-- `sensor.annerley_barometric_pressure`
-- `sensor.annerley_rain_rate`
-- `sensor.annerley_daily_rainfall`
-- `sensor.annerley_storm_rainfall_total`
-- `sensor.annerley_monthly_rainfall`
-- `sensor.annerley_yearly_rainfall`
-- `sensor.annerley_forecast_rain_24h`
-- `sensor.annerley_forecast_max_wind_24h`
-- `sensor.annerley_temperature_trend`
-- `sensor.annerley_cloud_cover_24h_avg`
+- `binary_sensor.annerleyweather_connectivity`
+- `binary_sensor.annerleyweather_transmitter_battery`
+- `sensor.annerleyweather_dewpoint`
+- `sensor.annerleyweather_inside_humidity`
+- `sensor.annerleyweather_inside_temperature`
+- `sensor.annerleyweather_last_rain_storm`
+- `sensor.annerleyweather_last_updated`
+- `sensor.annerleyweather_outside_humidity`
 
-Open the **Weather** dashboard on iPad from the left sidebar.
+Open the **Weather** dashboard on your tablet and confirm cards populate without entity-not-found errors.
 
-## Dashboard features
+## About `custom_components/weatherlink_dashboard`
 
-### Live Weather view
-- live station entity list (all required sensors),
-- 24-hour history graph for temperature, wind speed, rain rate, pressure,
-- map centered on local area,
-- Windy radar + satellite embeds with in-map layer controls (`menu=true`).
+`custom_components/weatherlink_dashboard/` is currently a **legacy custom integration** and is not required for the repaired dashboard.
 
-### Forecast view
-- forecast summary entity list,
-- Windy wind map,
-- Windy precipitation map,
-- Windy cloud-layer map.
+Recommendation:
+
+- **Short term:** leave it installed but unused while you confirm the updated dashboard is stable.
+- **After validation:** remove the custom integration and any related `sensor: - platform: weatherlink_dashboard` YAML config to avoid confusion and duplicate/invalid entities.
+
+## Windy embeds
+
+Windy iframe URLs in `dashboards/weather_dashboard.yaml` are configured with:
+
+- `menu=false`
+- `message=false`
+- `detail=false`
+
+This reduces UI clutter (especially the bottom forecast/details drawer) and keeps the map tablet-friendly.
 
 ## Manual verification checklist
 
-1. Check Home Assistant logs for `weatherlink_dashboard` startup errors.
-2. Confirm all `sensor.annerley_*` entities are created.
-3. Wait 2–3 minutes and verify the live sensors update.
-4. Check forecast sensors update (Windy refresh is less frequent).
-5. Open dashboard on iPad and confirm maps render and can be panned/zoomed.
+1. Confirm the WeatherLink integration entities above are present in **Developer Tools → States**.
+2. Open the weather dashboard and verify no entity cards show “Entity not found”.
+3. Confirm Windy maps render and no bottom forecast/details panel slides up.
+4. If your WeatherLink integration uses different entity IDs, update the entity IDs in `dashboards/weather_dashboard.yaml` to match your system.
 
 ## Themes and custom cards
 
