@@ -1,0 +1,86 @@
+title: Weather Station
+views:
+  - title: Live Weather
+    path: live-weather
+    icon: mdi:weather-partly-rainy
+    type: sections
+    sections:
+      - type: grid
+        cards:
+          - type: entities
+            title: Annerley Live Conditions
+            show_header_toggle: false
+            entities:
+              - entity: sensor.annerley_temperature
+              - entity: sensor.annerley_humidity
+              - entity: sensor.annerley_wind_speed
+              - entity: sensor.annerley_wind_gust
+              - entity: sensor.annerley_wind_direction
+              - entity: sensor.annerley_barometric_pressure
+              - entity: sensor.annerley_rain_rate
+              - entity: sensor.annerley_daily_rainfall
+              - entity: sensor.annerley_storm_rainfall_total
+              - entity: sensor.annerley_monthly_rainfall
+              - entity: sensor.annerley_yearly_rainfall
+              - entity: sensor.annerley_weatherlink_last_update
+          - type: history-graph
+            title: Weather Trends (24h)
+            hours_to_show: 24
+            refresh_interval: 60
+            entities:
+              - entity: sensor.annerley_temperature
+              - entity: sensor.annerley_wind_speed
+              - entity: sensor.annerley_rain_rate
+              - entity: sensor.annerley_barometric_pressure
+      - type: grid
+        cards:
+          - type: map
+            title: Station Location
+            entities:
+              - zone.home
+            default_zoom: 10
+            hours_to_show: 0
+          - type: iframe
+            title: Radar / Satellite / Wind (Windy)
+            aspect_ratio: 75%
+            url: >-
+              https://embed.windy.com/embed2.html?lat=-27.51638&lon=153.02674&detailLat=-27.51638&detailLon=153.02674&zoom=7&level=surface&overlay=radar&menu=true&message=true&marker=true&calendar=now&pressure=true&type=map&location=coordinates&detail=true&metricWind=default&metricTemp=default
+
+          - type: iframe
+            title: Satellite Layer (Windy)
+            aspect_ratio: 75%
+            url: >-
+              https://embed.windy.com/embed2.html?lat=-27.51638&lon=153.02674&detailLat=-27.51638&detailLon=153.02674&zoom=7&level=surface&overlay=satellite&menu=true&message=true&marker=true&calendar=now&pressure=true&type=map&location=coordinates&detail=true&metricWind=default&metricTemp=default
+
+  - title: Forecast
+    path: forecast
+    icon: mdi:weather-cloudy-arrow-right
+    type: sections
+    sections:
+      - type: grid
+        cards:
+          - type: entities
+            title: 24-Hour Forecast Summary
+            show_header_toggle: false
+            entities:
+              - entity: sensor.annerley_forecast_rain_24h
+              - entity: sensor.annerley_forecast_max_wind_24h
+              - entity: sensor.annerley_temperature_trend
+              - entity: sensor.annerley_cloud_cover_24h_avg
+          - type: iframe
+            title: Windy Forecast Map
+            aspect_ratio: 75%
+            url: >-
+              https://embed.windy.com/embed2.html?lat=-27.51638&lon=153.02674&detailLat=-27.51638&detailLon=153.02674&zoom=6&level=surface&overlay=wind&menu=true&message=true&marker=true&calendar=now&pressure=true&type=map&location=coordinates&detail=true&metricWind=default&metricTemp=default
+      - type: grid
+        cards:
+          - type: iframe
+            title: Precipitation Forecast
+            aspect_ratio: 75%
+            url: >-
+              https://embed.windy.com/embed2.html?lat=-27.51638&lon=153.02674&detailLat=-27.51638&detailLon=153.02674&zoom=6&level=surface&overlay=rain&menu=true&message=true&marker=true&calendar=now&pressure=true&type=map&location=coordinates&detail=true&metricWind=default&metricTemp=default
+          - type: iframe
+            title: Cloud Layer Forecast
+            aspect_ratio: 75%
+            url: >-
+              https://embed.windy.com/embed2.html?lat=-27.51638&lon=153.02674&detailLat=-27.51638&detailLon=153.02674&zoom=6&level=surface&overlay=clouds&menu=true&message=true&marker=true&calendar=now&pressure=true&type=map&location=coordinates&detail=true&metricWind=default&metricTemp=default
