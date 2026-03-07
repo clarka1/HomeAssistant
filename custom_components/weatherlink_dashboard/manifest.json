@@ -1,0 +1,10 @@
+{
+  "domain": "weatherlink_dashboard",
+  "name": "WeatherLink Dashboard",
+  "version": "0.1.0",
+  "documentation": "https://github.com/clarka1/HomeAssistant",
+  "iot_class": "cloud_polling",
+  "codeowners": ["@clarka1"],
+  "requirements": [],
+  "loggers": ["custom_components.weatherlink_dashboard"]
+}
