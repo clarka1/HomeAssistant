@@ -1,0 +1,30 @@
+title: Home
+views:
+  - title: Overview
+    path: overview
+    icon: mdi:home
+    cards:
+      - type: weather-forecast
+        entity: weather.home
+        forecast_type: daily
+
+      - type: entities
+        title: Lights
+        entities:
+          - entity: light.living_room
+          - entity: light.kitchen
+          - entity: light.bedroom
+
+      - type: entities
+        title: Climate
+        entities:
+          - entity: climate.living_room
+          - entity: sensor.living_room_temperature
+          - entity: sensor.living_room_humidity
+
+      - type: entities
+        title: Security
+        entities:
+          - entity: binary_sensor.front_door
+          - entity: binary_sensor.back_door
+          - entity: alarm_control_panel.home
