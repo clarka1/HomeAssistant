@@ -70,6 +70,18 @@ Recommendation:
 - **Short term:** leave it installed but unused while you confirm the updated dashboard is stable.
 - **After validation:** remove the custom integration and any related `sensor: - platform: weatherlink_dashboard` YAML config to avoid confusion and duplicate/invalid entities.
 
+
+### Custom card dependency for Weather Trends
+
+The weather dashboard now uses `custom:apexcharts-card` for dual-axis Weather Trends charts.
+
+Install via HACS:
+
+1. Go to **HACS → Frontend**.
+2. Search for **ApexCharts Card** and install it.
+3. Confirm the Lovelace resource is added (usually `/hacsfiles/apexcharts-card/apexcharts-card.js`).
+4. Reload the browser cache and refresh dashboards.
+
 ## Windy embeds
 
 Windy iframe URLs in `dashboards/weather_dashboard.yaml` are configured with:
