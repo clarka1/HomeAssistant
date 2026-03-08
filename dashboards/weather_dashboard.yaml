@@ -12,17 +12,31 @@ views:
             show_header_toggle: false
             entities:
               - entity: sensor.annerleyweather_outside_temperature
+                name: Outside temperature
               - entity: sensor.annerleyweather_outside_humidity
+                name: Outside humidity
               - entity: sensor.annerleyweather_dewpoint
-              - entity: sensor.annerleyweather_barometric_pressure
-              - entity: sensor.annerleyweather_rain_rate
-                name: Current Storm Amount
-              - entity: sensor.annerleyweather_last_rain_storm
+                name: Dew point
+              - entity: sensor.annerleyweather_pressure
+                name: Barometric pressure
+              - entity: sensor.annerleyweather_rain_intensity
+                name: Rain intensity
+              - entity: sensor.annerleyweather_rain_storm
+                name: Storm rainfall
+              - entity: sensor.annerleyweather_rain_today
+                name: Rain today
+              - entity: sensor.annerleyweather_wind
+                name: Wind speed
+              - entity: sensor.annerleyweather_wind_gust
+                name: Wind gust
+              - entity: sensor.annerleyweather_wind_direction
+                name: Wind direction
               - entity: sensor.annerleyweather_last_updated
+                name: Last updated
               - entity: binary_sensor.annerleyweather_connectivity
+                name: Connectivity
               - entity: binary_sensor.annerleyweather_transmitter_battery
-              - entity: sensor.annerleyweather_inside_temperature
-              - entity: sensor.annerleyweather_inside_humidity
+                name: Transmitter battery
           - type: history-graph
             title: Outside Temperature & Dew Point (24h)
             hours_to_show: 24
@@ -37,21 +51,21 @@ views:
             hours_to_show: 24
             refresh_interval: 300
             entities:
-              - entity: sensor.annerleyweather_barometric_pressure
+              - entity: sensor.annerleyweather_pressure
                 name: Barometric Pressure
-              - entity: sensor.annerleyweather_rain_rate
-                name: Rainfall
+              - entity: sensor.annerleyweather_rain_intensity
+                name: Rainfall Intensity
       - type: grid
         cards:
           - type: iframe
             title: Radar / Satellite / Wind (Windy)
-            aspect_ratio: 300%
+            aspect_ratio: 150%
             url: >-
               https://embed.windy.com/embed2.html?lat=-27.51638&lon=153.02674&detailLat=-27.51638&detailLon=153.02674&zoom=7&level=surface&overlay=radar&menu=false&message=false&marker=true&calendar=now&pressure=true&type=map&location=coordinates&detail=false&metricWind=default&metricTemp=default
 
           - type: iframe
             title: Satellite Layer (Windy)
-            aspect_ratio: 300%
+            aspect_ratio: 150%
             url: >-
               https://embed.windy.com/embed2.html?lat=-27.51638&lon=153.02674&detailLat=-27.51638&detailLon=153.02674&zoom=7&level=surface&overlay=satellite&menu=false&message=false&marker=true&calendar=now&pressure=true&type=map&location=coordinates&detail=false&metricWind=default&metricTemp=default
 
@@ -67,23 +81,23 @@ views:
             show_header_toggle: false
             entities:
               - entity: sensor.annerleyweather_last_updated
-              - entity: sensor.annerleyweather_last_rain_storm
+              - entity: sensor.annerleyweather_rain_storm
               - entity: binary_sensor.annerleyweather_connectivity
               - entity: binary_sensor.annerleyweather_transmitter_battery
           - type: iframe
             title: Windy Forecast Map
-            aspect_ratio: 300%
+            aspect_ratio: 150%
             url: >-
               https://embed.windy.com/embed2.html?lat=-27.51638&lon=153.02674&detailLat=-27.51638&detailLon=153.02674&zoom=6&level=surface&overlay=wind&menu=false&message=false&marker=true&calendar=now&pressure=true&type=map&location=coordinates&detail=false&metricWind=default&metricTemp=default
       - type: grid
         cards:
           - type: iframe
             title: Precipitation Forecast
-            aspect_ratio: 300%
+            aspect_ratio: 150%
             url: >-
               https://embed.windy.com/embed2.html?lat=-27.51638&lon=153.02674&detailLat=-27.51638&detailLon=153.02674&zoom=6&level=surface&overlay=rain&menu=false&message=false&marker=true&calendar=now&pressure=true&type=map&location=coordinates&detail=false&metricWind=default&metricTemp=default
           - type: iframe
             title: Cloud Layer Forecast
-            aspect_ratio: 300%
+            aspect_ratio: 150%
             url: >-
               https://embed.windy.com/embed2.html?lat=-27.51638&lon=153.02674&detailLat=-27.51638&detailLon=153.02674&zoom=6&level=surface&overlay=clouds&menu=false&message=false&marker=true&calendar=now&pressure=true&type=map&location=coordinates&detail=false&metricWind=default&metricTemp=default
