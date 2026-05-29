@@ -35,6 +35,22 @@ class ConfigContractTest < Minitest::Test
     assert_includes yesterday.fetch("state"), "last_period"
   end
 
+  def test_configuration_enables_packages_and_yaml_dashboards
+    configuration = load_yaml("configuration.yaml")
+
+    assert_equal "packages",
+                 configuration.fetch("homeassistant").fetch("packages")
+
+    dashboards = configuration.fetch("lovelace").fetch("dashboards")
+
+    assert_equal "dashboards/home.yaml",
+                 dashboards.fetch("home-dashboard").fetch("filename")
+    assert_equal "dashboards/weather_dashboard.yaml",
+                 dashboards.fetch("weather-dashboard").fetch("filename")
+    assert_equal "dashboards/energy.yaml",
+                 dashboards.fetch("energy-dashboard").fetch("filename")
+  end
+
   def test_weather_dashboard_surfaces_core_davis_console_values
     dashboard = load_yaml("dashboards/weather_dashboard.yaml")
     entity_ids = deep_entity_ids(dashboard)

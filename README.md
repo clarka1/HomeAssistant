@@ -12,6 +12,7 @@ to access.
 
 ```text
 .
+├── configuration.yaml            # Package and Lovelace dashboard wiring
 ├── dashboards/
 │   ├── home.yaml                 # Daily cockpit plus room views
 │   ├── energy.yaml               # Built-in Home Assistant energy cards
@@ -151,6 +152,7 @@ Recommended cleanup order:
 
 Copy or sync these files into Home Assistant:
 
+- `configuration.yaml` -> `/config/configuration.yaml`
 - `dashboards/home.yaml` -> `/config/dashboards/home.yaml`
 - `dashboards/weather_dashboard.yaml` -> `/config/dashboards/weather_dashboard.yaml`
 - `dashboards/energy.yaml` -> `/config/dashboards/energy.yaml`
