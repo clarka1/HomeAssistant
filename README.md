@@ -200,6 +200,10 @@ After copying:
 5. Confirm `sensor.annerley_rain_yesterday` appears after the utility meter has
    completed a daily cycle.
 
+If `sensor.annerley_rain_daily` starts as `unknown` with `status: paused`,
+calibrate it to `0` from Developer Tools > Actions using
+`utility_meter.calibrate`; it should then report `status: collecting`.
+
 ## Validation
 
 Run the repo contract tests locally:
