@@ -36,6 +36,8 @@ Last live inventory used for this repo update:
 - Important integrations: `weatherlink`, `lifx`, `sensibo`, `dyson_local`,
   `aarlo`, `lg_thinq`, `webostv`, `homekit`, `apple_tv`, `cast`
 - Registry scale at audit time: 10 areas, 81 devices, 468 entity-registry rows
+- Live HA area cleanup after deployment: 9 active areas after moving devices out
+  of `Living Areas`, `Living Room`, and `lexis`
 
 The room model should follow the unit floor plan:
 
@@ -147,6 +149,17 @@ Recommended cleanup order:
 4. Keep `Lexi's Room` as the Apple Home room for Bedroom 2; do not use `lexis`.
 5. Only after names/rooms are stable, review Home Assistant-created HomeKit
    bridge/accessory duplicates.
+
+Completed HA room cleanup:
+
+- Created `Bathroom` and `Wardrobe` areas.
+- Moved bathroom lights out of `Bedroom`; moved wardrobe light to `Wardrobe`.
+- Moved kitchen/hallway/lounge/TV lights out of `Living Areas`.
+- Moved Lexi's HomePod from `lexis` to `Lexi's Room`.
+- Moved Arlo devices to `Courtyard`.
+- Moved HA-generated TV/Chromecast media devices and LG media devices to
+  `Lounge`.
+- Deleted empty HA areas `lexis`, `living_areas`, and `living_room`.
 
 ## Deployment
 
