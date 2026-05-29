@@ -1,30 +1,384 @@
 title: Home
 views:
-  - title: Overview
-    path: overview
-    icon: mdi:home
-    cards:
-      - type: weather-forecast
-        entity: weather.home
-        forecast_type: daily
+  - title: Daily Cockpit
+    path: cockpit
+    icon: mdi:home-assistant
+    type: sections
+    max_columns: 4
+    sections:
+      - type: grid
+        cards:
+          - type: weather-forecast
+            entity: weather.forecast_home
+            forecast_type: daily
+          - type: entities
+            title: Rain and weather
+            show_header_toggle: false
+            entities:
+              - entity: sensor.annerleyweather_outside_temperature
+                name: Outside temperature
+              - entity: sensor.annerleyweather_inside_temperature
+                name: Inside temperature
+              - entity: sensor.annerleyweather_rain_today
+                name: Rain today
+              - entity: sensor.annerley_rain_yesterday
+                name: Rain yesterday
+              - entity: sensor.annerleyweather_rain_storm
+                name: Current storm
+              - entity: sensor.annerleyweather_rain_this_month
+                name: Rain this month
+              - entity: sensor.annerleyweather_last_updated
+                name: Weather station updated
 
-      - type: entities
-        title: Lights
-        entities:
-          - entity: light.living_room
-          - entity: light.kitchen
-          - entity: light.bedroom
+      - type: grid
+        cards:
+          - type: picture-entity
+            title: Courtyard
+            entity: camera.aarlo_courtyard
+            camera_view: live
+            show_state: true
+          - type: picture-entity
+            title: Patio
+            entity: camera.aarlo_patio
+            camera_view: live
+            show_state: true
+          - type: entities
+            title: Arlo status
+            show_header_toggle: false
+            entities:
+              - entity: alarm_control_panel.aarlo_location_home
+                name: Location mode
+              - entity: binary_sensor.aarlo_connected_courtyard
+                name: Courtyard connected
+              - entity: sensor.aarlo_battery_level_courtyard
+                name: Courtyard battery
+              - entity: binary_sensor.aarlo_connected_patio
+                name: Patio connected
+              - entity: sensor.aarlo_battery_level_patio
+                name: Patio battery
+              - entity: binary_sensor.aarlo_connected_inside
+                name: Inside connected
+              - entity: sensor.aarlo_battery_level_inside
+                name: Inside battery
+              - entity: binary_sensor.aarlo_connected_floating_cam
+                name: Floating cam connected
+              - entity: sensor.aarlo_battery_level_floating_cam
+                name: Floating cam battery
 
-      - type: entities
-        title: Climate
-        entities:
-          - entity: climate.living_room
-          - entity: sensor.living_room_temperature
-          - entity: sensor.living_room_humidity
+      - type: grid
+        cards:
+          - type: thermostat
+            entity: climate.lounge
+            name: Lounge AC
+          - type: thermostat
+            entity: climate.bedroom
+            name: Bedroom AC
+          - type: entities
+            title: Air quality and Dyson
+            show_header_toggle: false
+            entities:
+              - entity: fan.dyson_pure_hot_cooltm
+                name: Dyson fan
+              - entity: climate.dyson_pure_hot_cooltm
+                name: Dyson climate
+              - entity: sensor.dyson_pure_hot_cooltm_temperature
+                name: Dyson temperature
+              - entity: sensor.dyson_pure_hot_cooltm_humidity
+                name: Dyson humidity
+              - entity: sensor.dyson_pure_hot_cooltm_pm_2_5
+                name: PM2.5
+              - entity: sensor.dyson_pure_hot_cooltm_pm_10
+                name: PM10
+              - entity: sensor.dyson_pure_hot_cooltm_volatile_organic_compounds_index
+                name: VOC index
+              - entity: sensor.dyson_pure_hot_cooltm_hepa_filter_life
+                name: HEPA filter
+              - entity: sensor.dyson_pure_hot_cooltm_carbon_filter_life
+                name: Carbon filter
 
-      - type: entities
-        title: Security
-        entities:
-          - entity: binary_sensor.front_door
-          - entity: binary_sensor.back_door
-          - entity: alarm_control_panel.home
+      - type: grid
+        cards:
+          - type: entities
+            title: Lights
+            show_header_toggle: false
+            entities:
+              - entity: light.lounge_lamp
+                name: Lounge lamp
+              - entity: light.lounge_1
+              - entity: light.lounge_2
+              - entity: light.lounge_3
+              - entity: light.lounge_4
+              - entity: light.tv_light_1
+              - entity: light.tv_light_2
+              - entity: light.tv_light_3
+              - entity: light.tv_light_4
+              - entity: light.kitchen_sink
+              - entity: light.fridge_light
+              - entity: light.pantry_light
+              - entity: light.bedside_1
+              - entity: light.bedside_2
+              - entity: light.lexis_room_1
+              - entity: light.lexis_room_2
+              - entity: light.hallway_1
+
+      - type: grid
+        cards:
+          - type: entities
+            title: Washer
+            show_header_toggle: false
+            entities:
+              - entity: sensor.front_load_washer_current_status
+                name: Status
+              - entity: switch.washer_power
+                name: Power
+              - entity: binary_sensor.front_load_washer_remote_start
+                name: Remote start
+              - entity: sensor.front_load_washer_remaining_time
+                name: Remaining time
+              - entity: sensor.front_load_washer_total_time
+                name: Total time
+              - entity: sensor.front_load_washer_cycles
+                name: Cycles
+          - type: entities
+            title: Media
+            show_header_toggle: false
+            entities:
+              - entity: media_player.lounge
+                name: Lounge Apple TV
+              - entity: media_player.lg_speaker_sp11ra
+                name: Soundbar
+              - entity: media_player.lg_webos_tv_oled65c5psa_2
+                name: LG C5
+              - entity: media_player.living_room_xbox
+                name: Xbox
+              - entity: media_player.hallway
+                name: Hallway HomePod
+              - entity: media_player.lexis_homepod
+                name: Lexi's HomePod
+
+      - type: grid
+        cards:
+          - type: entities
+            title: Watch list
+            show_header_toggle: false
+            entities:
+              - entity: light.reading_lamp
+                name: Reading lamp
+              - entity: light.lexis_lamp
+                name: Lexi's lamp
+              - entity: light.bathroom_1
+              - entity: light.bathroom_2
+              - entity: media_player.chromecast
+              - entity: media_player.chromecast_2
+              - entity: media_player.tv
+              - entity: media_player.xbox
+              - entity: camera.aarlo_inside
+                name: Inside camera
+              - entity: camera.aarlo_floating_cam
+                name: Floating camera
+
+  - title: Lounge
+    path: lounge
+    icon: mdi:sofa
+    type: sections
+    max_columns: 3
+    sections:
+      - type: grid
+        cards:
+          - type: thermostat
+            entity: climate.lounge
+          - type: thermostat
+            entity: climate.dyson_pure_hot_cooltm
+          - type: entities
+            title: Lounge air
+            entities:
+              - entity: switch.lounge_climate_react
+              - entity: switch.lounge_timer
+              - entity: sensor.lounge_timer_end_time
+              - entity: sensor.lounge_airq_co2
+              - entity: sensor.lounge_airq_tvoc
+              - entity: fan.dyson_pure_hot_cooltm
+              - entity: switch.dyson_pure_hot_cooltm_night_mode
+              - entity: switch.dyson_pure_hot_cooltm_continuous_monitoring
+      - type: grid
+        cards:
+          - type: entities
+            title: Lounge lights
+            entities:
+              - entity: light.lounge_lamp
+              - entity: light.lounge_1
+              - entity: light.lounge_2
+              - entity: light.lounge_3
+              - entity: light.lounge_4
+              - entity: light.tv_light_1
+              - entity: light.tv_light_2
+              - entity: light.tv_light_3
+              - entity: light.tv_light_4
+      - type: grid
+        cards:
+          - type: picture-entity
+            entity: camera.aarlo_inside
+            camera_view: live
+            show_state: true
+          - type: entities
+            title: Lounge media
+            entities:
+              - entity: media_player.lounge
+                name: Apple TV
+              - entity: media_player.lg_speaker_sp11ra
+                name: Soundbar
+              - entity: media_player.lg_webos_tv_oled65c5psa_2
+                name: LG C5
+              - entity: media_player.chromecast
+              - entity: media_player.living_room_xbox
+
+  - title: Kitchen
+    path: kitchen
+    icon: mdi:silverware-fork-knife
+    type: sections
+    sections:
+      - type: grid
+        cards:
+          - type: entities
+            title: Kitchen and dining lights
+            entities:
+              - entity: light.kitchen_sink
+              - entity: light.fridge_light
+              - entity: light.pantry_light
+              - entity: light.entry_light
+
+  - title: Bedroom
+    path: bedroom
+    icon: mdi:bed-king
+    type: sections
+    max_columns: 2
+    sections:
+      - type: grid
+        cards:
+          - type: thermostat
+            entity: climate.bedroom
+          - type: entities
+            title: Bedroom climate
+            entities:
+              - entity: switch.bedroom_climate_react
+              - entity: switch.bedroom_timer
+              - entity: sensor.bedroom_timer_end_time
+              - entity: sensor.bedroom_filter_last_reset
+      - type: grid
+        cards:
+          - type: entities
+            title: Bedroom lights and media
+            entities:
+              - entity: light.bedroom_1
+              - entity: light.bedroom_2
+              - entity: light.bedside_1
+              - entity: light.bedside_2
+              - entity: light.reading_lamp
+              - entity: media_player.tv
+
+  - title: Lexi's Room
+    path: lexis-room
+    icon: mdi:bed
+    type: sections
+    sections:
+      - type: grid
+        cards:
+          - type: entities
+            title: Lexi's room
+            entities:
+              - entity: light.lexis_room_1
+              - entity: light.lexis_room_2
+              - entity: light.lexis_lamp
+              - entity: media_player.lexis_homepod
+
+  - title: Courtyard
+    path: courtyard
+    icon: mdi:flower
+    type: sections
+    max_columns: 3
+    sections:
+      - type: grid
+        cards:
+          - type: picture-entity
+            entity: camera.aarlo_courtyard
+            camera_view: live
+            show_state: true
+          - type: picture-entity
+            entity: camera.aarlo_patio
+            camera_view: live
+            show_state: true
+          - type: picture-entity
+            entity: camera.aarlo_floating_cam
+            camera_view: live
+            show_state: true
+      - type: grid
+        cards:
+          - type: entities
+            title: Courtyard controls
+            entities:
+              - entity: light.aarlo_courtyard
+              - entity: light.aarlo_patio
+              - entity: light.aarlo_floating_cam
+              - entity: switch.aarlo_snapshot_courtyard
+              - entity: switch.aarlo_snapshot_patio
+              - entity: switch.aarlo_snapshot_floating_cam
+              - entity: switch.aarlo_siren_courtyard
+              - entity: switch.aarlo_siren_patio
+              - entity: switch.aarlo_siren_floating_cam
+              - entity: switch.aarlo_all_sirens
+      - type: grid
+        cards:
+          - type: entities
+            title: Courtyard weather
+            entities:
+              - entity: sensor.annerleyweather_outside_temperature
+              - entity: sensor.annerleyweather_outside_humidity
+              - entity: sensor.annerleyweather_wind
+              - entity: sensor.annerleyweather_rain_today
+              - entity: sensor.annerley_rain_yesterday
+
+  - title: Hallway
+    path: hallway
+    icon: mdi:door
+    type: sections
+    sections:
+      - type: grid
+        cards:
+          - type: entities
+            title: Entry and hallway
+            entities:
+              - entity: light.entry_light
+              - entity: light.hallway_1
+              - entity: media_player.hallway
+
+  - title: Laundry
+    path: laundry
+    icon: mdi:washing-machine
+    type: sections
+    sections:
+      - type: grid
+        cards:
+          - type: entities
+            title: Washer
+            entities:
+              - entity: switch.washer_power
+              - entity: sensor.front_load_washer_current_status
+              - entity: binary_sensor.front_load_washer_remote_start
+              - entity: sensor.front_load_washer_remaining_time
+              - entity: sensor.front_load_washer_total_time
+              - entity: sensor.front_load_washer_delayed_end
+              - entity: sensor.front_load_washer_cycles
+              - entity: event.front_load_washer_error
+              - entity: event.front_load_washer_notification
+
+  - title: Wardrobe
+    path: wardrobe
+    icon: mdi:hanger
+    type: sections
+    sections:
+      - type: grid
+        cards:
+          - type: entities
+            title: Wardrobe
+            entities:
+              - entity: light.wardrobe

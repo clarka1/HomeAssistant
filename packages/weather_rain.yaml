@@ -1,0 +1,24 @@
+utility_meter:
+  annerley_rain_daily:
+    source: sensor.annerleyweather_rain_this_year
+    name: Annerley Rain Daily
+    unique_id: annerley_rain_daily
+    cycle: daily
+    periodically_resetting: false
+    always_available: true
+
+template:
+  - sensor:
+      - name: Annerley Rain Yesterday
+        unique_id: annerley_rain_yesterday
+        icon: mdi:weather-rainy
+        unit_of_measurement: mm
+        device_class: precipitation
+        state_class: measurement
+        state: >-
+          {{ state_attr('sensor.annerley_rain_daily', 'last_period') | float(0) | round(1) }}
+        attributes:
+          source: sensor.annerleyweather_rain_this_year
+          note: >-
+            Previous completed daily utility-meter cycle. It becomes fully
+            reliable after the first midnight reset following deployment.
