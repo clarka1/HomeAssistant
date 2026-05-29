@@ -1,54 +1,59 @@
 # HomeAssistant Dashboards
 
-A collection of [Home Assistant](https://www.home-assistant.io/) Lovelace dashboards, themes, and custom card configurations.
+Configuration and Lovelace dashboard files for the Annerley smart home.
+
+Home Assistant is the complete smart-home inventory. Apple Home/HomeKit remains
+the broad Siri-facing control surface, but native HomeKit accessories should not
+be removed or re-paired unless there is no alternative. This is especially
+important for LIFX downlights, because physical pairing codes may be difficult
+to access.
 
 ## Repository Structure
 
-```
+```text
 .
-├── dashboards/                              # Lovelace dashboard YAML files
-│   ├── home.yaml                            # Main overview dashboard
-│   ├── energy.yaml                          # Energy monitoring dashboard
-│   └── weather_dashboard.yaml               # Weather station dashboard (Live + Forecast)
-├── themes/                                  # Custom UI themes
-│   └── default.yaml                         # Default theme
-├── custom_cards/                            # Custom Lovelace card resources
-└── custom_components/weatherlink_dashboard/ # Legacy custom WeatherLink sensor integration
+├── configuration.yaml            # Package and Lovelace dashboard wiring
+├── dashboards/
+│   ├── home.yaml                 # Daily cockpit plus room views
+│   ├── energy.yaml               # Built-in Home Assistant energy cards
+│   └── weather_dashboard.yaml    # Davis/WeatherLink dashboard
+├── packages/
+│   └── weather_rain.yaml         # Yesterday-rain helper sensors
+├── themes/
+│   └── default.yaml
+├── custom_cards/
+└── custom_components/
+    └── weatherlink_dashboard/    # Legacy custom integration, not required
 ```
 
-## Weather Dashboard (Annerley)
+## Current Live Context
 
-The weather dashboard is now wired to the **existing Home Assistant WeatherLink integration entities** already created in your instance.
+Last live inventory used for this repo update:
 
-This avoids failures from non-existent `sensor.annerley_*` entities and keeps the dashboard compatible with an integration that is already working in production.
+- Home Assistant: `2026.3.1`
+- Time zone: `Australia/Brisbane`
+- Weather station: Davis Vantage Vue / WeatherLink, device `Annerley`
+- Important integrations: `weatherlink`, `lifx`, `sensibo`, `dyson_local`,
+  `aarlo`, `lg_thinq`, `webostv`, `homekit`, `apple_tv`, `cast`
+- Registry scale at audit time: 10 areas, 81 devices, 468 entity-registry rows
+- Live HA area cleanup after deployment: 9 active areas after moving devices out
+  of `Living Areas`, `Living Room`, and `lexis`
 
-### 1) Copy files into Home Assistant config
+The room model should follow the unit floor plan:
 
-From this repository, copy:
+- `Bedroom` means the main bedroom / Bed 1.
+- `Lexi's Room` means Bedroom 2.
+- `Bathroom` means the ensuite.
+- The main bathroom/Lexi's bathroom currently has no smart lights and does not
+  need a separate active dashboard room.
+- `Lounge`, `Kitchen`, `Courtyard`, `Hallway`, `Laundry`, and `Wardrobe` are
+  physical spaces.
+- `Living Areas`, `Living Room`, `Lounge Room`, and `lexis` are migration
+  buckets/naming leftovers, not long-term canonical room names.
 
-- `dashboards/weather_dashboard.yaml` → `/config/dashboards/weather_dashboard.yaml`
+## Weather Dashboard
 
-### 2) Register the dashboard in Lovelace
-
-```yaml
-lovelace:
-  mode: yaml
-  dashboards:
-    lovelace-weather:
-      mode: yaml
-      filename: dashboards/weather_dashboard.yaml
-      title: Weather
-      icon: mdi:weather-partly-rainy
-      show_in_sidebar: true
-```
-
-### 3) Restart or reload Lovelace dashboards
-
-Apply from **Settings → Dashboards** (reload YAML dashboards) or restart Home Assistant.
-
-### 4) Verify entities and dashboard
-
-Current expected WeatherLink entity IDs (observed in runtime):
+`dashboards/weather_dashboard.yaml` is wired to the live WeatherLink entities:
 
 - `binary_sensor.annerleyweather_connectivity`
 - `binary_sensor.annerleyweather_transmitter_battery`
@@ -59,59 +64,189 @@ Current expected WeatherLink entity IDs (observed in runtime):
 - `sensor.annerleyweather_last_updated`
 - `sensor.annerleyweather_outside_humidity`
 - `sensor.annerleyweather_outside_temperature`
-- `sensor.annerleyweather_barometric_pressure`
-- `sensor.annerleyweather_rain_rate`
+- `sensor.annerleyweather_pressure`
+- `sensor.annerleyweather_rain_intensity`
+- `sensor.annerleyweather_rain_storm`
+- `sensor.annerleyweather_rain_this_month`
+- `sensor.annerleyweather_rain_this_year`
+- `sensor.annerleyweather_rain_today`
+- `sensor.annerleyweather_solar_panel`
+- `sensor.annerleyweather_supercapacitor`
+- `sensor.annerleyweather_transmitter_battery`
+- `sensor.annerleyweather_wind`
+- `sensor.annerleyweather_wind_direction`
+- `sensor.annerleyweather_wind_gust`
 
-Open the **Weather** dashboard on your tablet and confirm cards populate without entity-not-found errors.
+The dashboard also expects the helper sensor from `packages/weather_rain.yaml`:
 
-## About `custom_components/weatherlink_dashboard`
+- `sensor.annerley_rain_yesterday`
 
-`custom_components/weatherlink_dashboard/` is currently a **legacy custom integration** and is not required for the repaired dashboard.
+### Yesterday's Rain
 
-Recommendation:
+`packages/weather_rain.yaml` creates:
 
-- **Short term:** leave it installed but unused while you confirm the updated dashboard is stable.
-- **After validation:** remove the custom integration and any related `sensor: - platform: weatherlink_dashboard` YAML config to avoid confusion and duplicate/invalid entities.
+- `sensor.annerley_rain_daily`, a daily utility meter sourced from
+  `sensor.annerleyweather_rain_this_year`
+- `sensor.annerley_rain_yesterday`, a template sensor showing the previous
+  completed daily cycle from the utility meter's `last_period` attribute
 
+The first daily cycle after deployment may be incomplete. The value becomes
+fully reliable after the first midnight reset.
 
-### Weather Trends dependency
+## Home Dashboard
 
-The weather dashboard now uses built-in `history-graph` cards for the trend section.
+`dashboards/home.yaml` now starts with a daily cockpit and then room views.
 
-- No custom Lovelace card dependency is required.
-- No HACS frontend card install is required for Weather Trends.
+The cockpit surfaces:
 
-## Windy embeds
+- Weather and rain, including yesterday's rainfall
+- Arlo cameras, battery, and connectivity
+- Sensibo climate controls
+- Dyson temperature, humidity, air quality, and filter status
+- LIFX lights
+- LG washer state
+- Media devices
+- A watch list for stale/unavailable devices
 
-Windy iframe URLs in `dashboards/weather_dashboard.yaml` are configured with:
+Room views are:
 
-- `menu=false`
-- `message=false`
-- `detail=false`
+- Lounge
+- Kitchen
+- Bedroom
+- Lexi's Room
+- Courtyard
+- Hallway
+- Laundry
+- Wardrobe
 
-This reduces UI clutter (especially the bottom forecast/details drawer) and keeps the map tablet-friendly.
+## HomeKit / Apple Home Guidance
 
-## Manual verification checklist
+The preferred model is broad mirroring: most HomeKit-supported Home Assistant
+controls should be visible in Apple Home/Siri.
 
-1. Confirm the WeatherLink integration entities above are present in **Developer Tools → States**.
-2. Open the weather dashboard and verify no entity cards show “Entity not found”.
-3. Confirm Windy maps render and no bottom forecast/details panel slides up.
-4. If your WeatherLink integration uses different entity IDs, update the entity IDs in `dashboards/weather_dashboard.yaml` to match your system.
+Constraints:
 
-## Themes and custom cards
+- Do not remove native HomeKit accessories if re-adding them could require a
+  physical pairing code.
+- Prefer renaming and room moves in Home Assistant and Apple Home before
+  considering bridge rebuilds.
+- HomeKit may cache accessory names after first pairing. Some name cleanup may
+  not fully appear until the relevant Home Assistant-created bridge/accessory is
+  re-paired.
+- Home Assistant-created bridges seen during audit were `HASS Bridge:21064`,
+  `TV:21065`, `Chromecast:21066`, and `Chromecast:21067`.
+- TV-like media players, remotes, locks, and cameras may need HomeKit accessory
+  mode rather than normal bridge mode.
+- If a bridge/accessory rebuild is needed, rebuild only Home Assistant-created
+  HomeKit entries where re-pairing does not require LIFX/native HomeKit codes.
 
-### Adding Themes
+Recommended cleanup order:
 
-1. Copy YAML files from `themes/` to your Home Assistant `themes/` directory.
-2. Add this to `configuration.yaml`:
+1. Fix Home Assistant area assignments and friendly names first.
+2. Reload dashboards and verify the daily cockpit.
+3. In Apple Home, move accessories into the canonical rooms and merge
+   `Lounge Room` into `Lounge`.
+4. Keep `Lexi's Room` as the Apple Home room for Bedroom 2; do not use `lexis`.
+5. Only after names/rooms are stable, review Home Assistant-created HomeKit
+   bridge/accessory duplicates.
+
+Completed HA room cleanup:
+
+- Created `Bathroom` and `Wardrobe` areas.
+- Moved bathroom lights out of `Bedroom`; moved wardrobe light to `Wardrobe`.
+- Moved kitchen/hallway/lounge/TV lights out of `Living Areas`.
+- Moved Lexi's HomePod from `lexis` to `Lexi's Room`.
+- Moved Arlo devices to `Courtyard`.
+- Moved HA-generated TV/Chromecast media devices and LG media devices to
+  `Lounge`.
+- Deleted empty HA areas `lexis`, `living_areas`, and `living_room`.
+
+## Deployment
+
+Copy or sync these files into Home Assistant:
+
+- `configuration.yaml` -> `/config/configuration.yaml`
+- `dashboards/home.yaml` -> `/config/dashboards/home.yaml`
+- `dashboards/weather_dashboard.yaml` -> `/config/dashboards/weather_dashboard.yaml`
+- `dashboards/energy.yaml` -> `/config/dashboards/energy.yaml`
+- `packages/weather_rain.yaml` -> `/config/packages/weather_rain.yaml`
+
+Enable packages if they are not already enabled:
+
+```yaml
+homeassistant:
+  packages: !include_dir_named packages
+```
+
+Register dashboards if they are not already registered:
+
+```yaml
+lovelace:
+  mode: yaml
+  dashboards:
+    lovelace-home:
+      mode: yaml
+      filename: dashboards/home.yaml
+      title: Home
+      icon: mdi:home-assistant
+      show_in_sidebar: true
+    lovelace-weather:
+      mode: yaml
+      filename: dashboards/weather_dashboard.yaml
+      title: Weather
+      icon: mdi:weather-partly-rainy
+      show_in_sidebar: true
+    lovelace-energy:
+      mode: yaml
+      filename: dashboards/energy.yaml
+      title: Energy
+      icon: mdi:lightning-bolt
+      show_in_sidebar: true
+```
+
+After copying:
+
+1. Run Home Assistant `homeassistant.check_config`.
+2. Reload core config or restart if packages were newly enabled.
+3. Reload YAML dashboards or restart Home Assistant.
+4. Confirm the weather and home dashboards show no `Entity not found` cards.
+5. Confirm `sensor.annerley_rain_yesterday` appears after the utility meter has
+   completed a daily cycle.
+
+If `sensor.annerley_rain_daily` starts as `unknown` with `status: paused`,
+calibrate it to `0` from Developer Tools > Actions using
+`utility_meter.calibrate`; it should then report `status: collecting`.
+
+## Validation
+
+Run the repo contract tests locally:
+
+```bash
+ruby test/test_config_contract.rb
+```
+
+The tests parse the YAML and assert that the rain package and core dashboard
+entities are present.
+
+During the implementation audit, all dashboard entity references were compared
+against the live Home Assistant state snapshot, with `sensor.annerley_rain_daily`
+and `sensor.annerley_rain_yesterday` treated as newly defined.
+
+## Legacy Custom WeatherLink Component
+
+`custom_components/weatherlink_dashboard/` is currently legacy and not required
+for the repaired dashboards. Keep it installed but unused until the WeatherLink
+integration and new dashboards are stable; then remove the custom integration
+and any related `sensor: - platform: weatherlink_dashboard` YAML config if it is
+still present in live Home Assistant.
+
+## Themes and Custom Cards
+
+To use themes:
 
 ```yaml
 frontend:
   themes: !include_dir_merge_named themes/
 ```
 
-3. Restart Home Assistant and select your theme via **Profile → Theme**.
-
-### Custom Cards
-
-See [`custom_cards/README.md`](custom_cards/README.md) for instructions on adding custom Lovelace cards.
+Custom cards, if needed later, should be documented in `custom_cards/README.md`.

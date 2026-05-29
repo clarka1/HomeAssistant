@@ -1,103 +1,175 @@
 title: Weather Station
 views:
-  - title: Live Weather
+  - title: Annerley Weather
     path: live-weather
     icon: mdi:weather-partly-rainy
     type: sections
+    max_columns: 3
     sections:
       - type: grid
         cards:
+          - type: heading
+            heading: Davis console
+            icon: mdi:weather-partly-rainy
+          - type: tile
+            entity: sensor.annerleyweather_outside_temperature
+            name: Outside temperature
+            icon: mdi:thermometer
+          - type: tile
+            entity: sensor.annerleyweather_inside_temperature
+            name: Inside temperature
+            icon: mdi:home-thermometer
+          - type: tile
+            entity: sensor.annerleyweather_outside_humidity
+            name: Outside humidity
+            icon: mdi:water-percent
+          - type: tile
+            entity: sensor.annerleyweather_inside_humidity
+            name: Inside humidity
+            icon: mdi:water-percent
+          - type: tile
+            entity: sensor.annerleyweather_dewpoint
+            name: Dew point
+            icon: mdi:thermometer-water
+          - type: tile
+            entity: sensor.annerleyweather_pressure
+            name: Barometer
+            icon: mdi:gauge
+
+      - type: grid
+        cards:
+          - type: heading
+            heading: Rain
+            icon: mdi:weather-pouring
+          - type: tile
+            entity: sensor.annerleyweather_rain_today
+            name: Today
+            icon: mdi:weather-rainy
+          - type: tile
+            entity: sensor.annerley_rain_yesterday
+            name: Yesterday
+            icon: mdi:calendar-arrow-left
+          - type: tile
+            entity: sensor.annerleyweather_rain_storm
+            name: Current storm
+            icon: mdi:weather-lightning-rainy
+          - type: tile
+            entity: sensor.annerleyweather_last_rain_storm
+            name: Last storm
+            icon: mdi:weather-rainy
+          - type: tile
+            entity: sensor.annerleyweather_rain_this_month
+            name: This month
+            icon: mdi:calendar-month
+          - type: tile
+            entity: sensor.annerleyweather_rain_this_year
+            name: This year
+            icon: mdi:calendar
+
+      - type: grid
+        cards:
+          - type: heading
+            heading: Wind and station
+            icon: mdi:weather-windy
+          - type: tile
+            entity: sensor.annerleyweather_wind
+            name: Wind speed
+            icon: mdi:weather-windy
+          - type: tile
+            entity: sensor.annerleyweather_wind_gust
+            name: Wind gust
+            icon: mdi:weather-windy-variant
+          - type: tile
+            entity: sensor.annerleyweather_wind_direction
+            name: Wind direction
+            icon: mdi:compass
+          - type: tile
+            entity: sensor.annerleyweather_rain_intensity
+            name: Rain intensity
+            icon: mdi:weather-pouring
           - type: entities
-            title: Annerley Live Conditions (WeatherLink Integration)
+            title: Station health
             show_header_toggle: false
             entities:
-              - entity: sensor.annerleyweather_outside_temperature
-                name: Outside temperature
-              - entity: sensor.annerleyweather_outside_humidity
-                name: Outside humidity
-              - entity: sensor.annerleyweather_dewpoint
-                name: Dew point
-              - entity: sensor.annerleyweather_pressure
-                name: Barometric pressure
-              - entity: sensor.annerleyweather_rain_intensity
-                name: Rain intensity
-              - entity: sensor.annerleyweather_rain_storm
-                name: Storm rainfall
-              - entity: sensor.annerleyweather_rain_today
-                name: Rain today
-              - entity: sensor.annerleyweather_wind
-                name: Wind speed
-              - entity: sensor.annerleyweather_wind_gust
-                name: Wind gust
-              - entity: sensor.annerleyweather_wind_direction
-                name: Wind direction
               - entity: sensor.annerleyweather_last_updated
                 name: Last updated
               - entity: binary_sensor.annerleyweather_connectivity
                 name: Connectivity
               - entity: binary_sensor.annerleyweather_transmitter_battery
-                name: Transmitter battery
+                name: Low transmitter battery
+              - entity: sensor.annerleyweather_transmitter_battery
+                name: Transmitter battery voltage
+              - entity: sensor.annerleyweather_solar_panel
+                name: Solar panel voltage
+              - entity: sensor.annerleyweather_supercapacitor
+                name: Supercapacitor voltage
+
+      - type: grid
+        cards:
+          - type: heading
+            heading: Trends
+            icon: mdi:chart-line
           - type: history-graph
-            title: Outside Temperature & Dew Point (24h)
+            title: Temperature and dew point
             hours_to_show: 24
             refresh_interval: 300
             entities:
               - entity: sensor.annerleyweather_outside_temperature
-                name: Outside Temperature
+                name: Outside
+              - entity: sensor.annerleyweather_inside_temperature
+                name: Inside
               - entity: sensor.annerleyweather_dewpoint
-                name: Dew Point
+                name: Dew point
           - type: history-graph
-            title: Barometric Pressure & Rainfall (24h)
-            hours_to_show: 24
+            title: Rain and pressure
+            hours_to_show: 48
             refresh_interval: 300
             entities:
-              - entity: sensor.annerleyweather_pressure
-                name: Barometric Pressure
+              - entity: sensor.annerleyweather_rain_today
+                name: Rain today
               - entity: sensor.annerleyweather_rain_intensity
-                name: Rainfall Intensity
+                name: Rain intensity
+              - entity: sensor.annerleyweather_pressure
+                name: Pressure
+
       - type: grid
         cards:
+          - type: heading
+            heading: Radar
+            icon: mdi:radar
           - type: iframe
-            title: Radar / Satellite / Wind (Windy)
+            title: Radar / satellite / wind
             aspect_ratio: 150%
             url: >-
               https://embed.windy.com/embed2.html?lat=-27.51638&lon=153.02674&detailLat=-27.51638&detailLon=153.02674&zoom=7&level=surface&overlay=radar&menu=false&message=false&marker=true&calendar=now&pressure=true&type=map&location=coordinates&detail=false&metricWind=default&metricTemp=default
-
-          - type: iframe
-            title: Satellite Layer (Windy)
-            aspect_ratio: 150%
-            url: >-
-              https://embed.windy.com/embed2.html?lat=-27.51638&lon=153.02674&detailLat=-27.51638&detailLon=153.02674&zoom=7&level=surface&overlay=satellite&menu=false&message=false&marker=true&calendar=now&pressure=true&type=map&location=coordinates&detail=false&metricWind=default&metricTemp=default
 
   - title: Forecast
     path: forecast
     icon: mdi:weather-cloudy-arrow-right
     type: sections
+    max_columns: 2
     sections:
       - type: grid
         cards:
-          - type: entities
-            title: WeatherLink Station Status
-            show_header_toggle: false
-            entities:
-              - entity: sensor.annerleyweather_last_updated
-              - entity: sensor.annerleyweather_rain_storm
-              - entity: binary_sensor.annerleyweather_connectivity
-              - entity: binary_sensor.annerleyweather_transmitter_battery
           - type: iframe
-            title: Windy Forecast Map
+            title: Windy forecast
             aspect_ratio: 150%
             url: >-
               https://embed.windy.com/embed2.html?lat=-27.51638&lon=153.02674&detailLat=-27.51638&detailLon=153.02674&zoom=6&level=surface&overlay=wind&menu=false&message=false&marker=true&calendar=now&pressure=true&type=map&location=coordinates&detail=false&metricWind=default&metricTemp=default
-      - type: grid
-        cards:
           - type: iframe
-            title: Precipitation Forecast
+            title: Precipitation forecast
             aspect_ratio: 150%
             url: >-
               https://embed.windy.com/embed2.html?lat=-27.51638&lon=153.02674&detailLat=-27.51638&detailLon=153.02674&zoom=6&level=surface&overlay=rain&menu=false&message=false&marker=true&calendar=now&pressure=true&type=map&location=coordinates&detail=false&metricWind=default&metricTemp=default
+      - type: grid
+        cards:
           - type: iframe
-            title: Cloud Layer Forecast
+            title: Satellite
+            aspect_ratio: 150%
+            url: >-
+              https://embed.windy.com/embed2.html?lat=-27.51638&lon=153.02674&detailLat=-27.51638&detailLon=153.02674&zoom=7&level=surface&overlay=satellite&menu=false&message=false&marker=true&calendar=now&pressure=true&type=map&location=coordinates&detail=false&metricWind=default&metricTemp=default
+          - type: iframe
+            title: Cloud layer
             aspect_ratio: 150%
             url: >-
               https://embed.windy.com/embed2.html?lat=-27.51638&lon=153.02674&detailLat=-27.51638&detailLon=153.02674&zoom=6&level=surface&overlay=clouds&menu=false&message=false&marker=true&calendar=now&pressure=true&type=map&location=coordinates&detail=false&metricWind=default&metricTemp=default
